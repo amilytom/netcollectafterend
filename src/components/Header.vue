@@ -21,38 +21,38 @@
   </div>
 </template>
 <script>
-  import Cookies from 'js-cookie';
+import Cookies from 'js-cookie';
 
-  export default {
-    data() {
-      return {
-        collapse: false,
-        fullscreen: false,
-        name: Cookies.get('name'),
-        message: 2
-      };
-    },
+export default {
+  data() {
+    return {
+      collapse: false,
+      fullscreen: false,
+      name: Cookies.get('name'),
+      message: 2
+    };
+  },
 
-    methods: {
-      // 用户名下拉菜单选择事件
-      handleCommand(command) {
-        if (command == 'loginout') {
-          this.logout();
-        }
-      },
-      logout() {
-        this.$store
-          .dispatch('logout')
-          .then(() => {
-            this.$message.success('退出登录');
-            this.$router.push({path: '/login'});
-          })
-          .catch((err) => {
-            console.log(err);
-          });
+  methods: {
+    // 用户名下拉菜单选择事件
+    handleCommand(command) {
+      if (command == 'loginout') {
+        this.logout();
       }
+    },
+    logout() {
+      this.$store
+        .dispatch('logout')
+        .then(() => {
+          this.$message.success('退出登录');
+          this.$router.push({path: '/login'});
+        })
+        .catch((err) => {
+          console.log(err);
+        });
     }
-  };
+  }
+};
 </script>
 <style scoped>
   .header {

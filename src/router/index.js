@@ -58,7 +58,7 @@ const router = new Router({
             title: '用户管理'
           }
         }
-      ]
+      ],
     },
     {
       path: '/login',
@@ -69,7 +69,7 @@ const router = new Router({
       path: '*',
       redirect: '/404'
     }
-  ]
+  ],
 });
 
 // 解决ElementUI导航栏中的vue-router在3.0版本以上重复点菜单报错问题

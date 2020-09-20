@@ -92,7 +92,7 @@ const user = {
         resolve();
       });
     }
-  }
+  },
 };
 
 export default user;
