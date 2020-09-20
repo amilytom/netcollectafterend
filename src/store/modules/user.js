@@ -1,15 +1,15 @@
-import loginApi from '@/api/loginApi';
-import {getToken, removeToken, setToken} from '@/utils/auth';
-import Cookies from 'js-cookie';
-import timeFormat from '@/utils/timeFormat';
+import loginApi from "@/api/loginApi";
+import { getToken, removeToken, setToken } from "@/utils/auth";
+import Cookies from "js-cookie";
+import timeFormat from "@/utils/timeFormat";
 
 const user = {
   state: {
     token: getToken(),
-    username: '',
-    name: '',
-    role: '',
-    groupName: ''
+    username: "",
+    name: "",
+    role: "",
+    groupName: "",
   },
 
   mutations: {
@@ -27,12 +27,12 @@ const user = {
     },
     SET_GROUPNAME: (state, groupName) => {
       state.groupName = groupName;
-    }
+    },
   },
 
   actions: {
     // 登录
-    login({commit}, userInfo) {
+    login({ commit }, userInfo) {
       return new Promise((resolve, reject) => {
         loginApi
           .login(userInfo)
@@ -41,19 +41,19 @@ const user = {
               console.log(response.data);
               const data = response.data;
               //console.log("登录信息", data);
-              commit('SET_TOKEN', data.token); // 登录时保存token到vuex
+              commit("SET_TOKEN", data.token); // 登录时保存token到vuex
               setToken(data.token); // 同时也保存到cookie
-              Cookies.set('username', data.username); // 保存用户名
-              commit('SET_USERNAME', data.username);
-              Cookies.set('name', data.name); // 保存姓名
-              commit('SET_NAME', data.name);
-              Cookies.set('role', data.role); // 保存角色
-              commit('SET_ROLE', data.role);
-              Cookies.set('groupName', data.groupName); // 保存管理员名称
-              commit('SET_GROUPNAME', data.groupName);
+              Cookies.set("username", data.username); // 保存用户名
+              commit("SET_USERNAME", data.username);
+              Cookies.set("name", data.name); // 保存姓名
+              commit("SET_NAME", data.name);
+              Cookies.set("role", data.role); // 保存角色
+              commit("SET_ROLE", data.role);
+              Cookies.set("groupName", data.groupName); // 保存管理员名称
+              commit("SET_GROUPNAME", data.groupName);
               let nowTime = new Date();
               let lastLoginTime = timeFormat.dateToTimestamp(nowTime);
-              Cookies.set('lastLoginAt', lastLoginTime); // 保存最后登录时间戳
+              Cookies.set("lastLoginAt", lastLoginTime); // 保存最后登录时间戳
               resolve(response);
             } else {
               resolve(response);
@@ -66,14 +66,14 @@ const user = {
     },
 
     // 登出
-    logout({commit, state}) {
+    logout({ commit, state }) {
       return new Promise((resolve, reject) => {
-        commit('SET_TOKEN', '');
+        commit("SET_TOKEN", "");
         removeToken();
-        Cookies.remove('username');
-        Cookies.remove('name');
-        Cookies.remove('role');
-        Cookies.remove('lastLoginAt');
+        Cookies.remove("username");
+        Cookies.remove("name");
+        Cookies.remove("role");
+        Cookies.remove("lastLoginAt");
         resolve();
       }).catch((error) => {
         reject(error);
@@ -81,17 +81,17 @@ const user = {
     },
 
     // 前端 登出
-    FedLogOut({commit}) {
+    FedLogOut({ commit }) {
       return new Promise((resolve) => {
-        commit('SET_TOKEN', '');
+        commit("SET_TOKEN", "");
         removeToken();
-        Cookies.remove('username');
-        Cookies.remove('name');
-        Cookies.remove('role');
-        Cookies.remove('lastLoginAt');
+        Cookies.remove("username");
+        Cookies.remove("name");
+        Cookies.remove("role");
+        Cookies.remove("lastLoginAt");
         resolve();
       });
-    }
+    },
   },
 };
 

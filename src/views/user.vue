@@ -3,7 +3,7 @@
     <div class="crumbs">
       <el-breadcrumb separator="/">
         <el-breadcrumb-item
-        ><i class="el-icon-user-solid"></i> {{ title }}
+          ><i class="el-icon-user-solid"></i> {{ title }}
         </el-breadcrumb-item>
       </el-breadcrumb>
     </div>
@@ -27,7 +27,7 @@
         ></el-input>
         <el-button type="primary" icon="search" @click="search">搜索</el-button>
         <el-button type="primary" icon="search" @click="handleAdd"
-        >添加
+          >添加
         </el-button>
       </div>
 
@@ -50,14 +50,14 @@
               type="text"
               icon="el-icon-edit"
               @click="handleEdit(scope.row)"
-            >修改
+              >修改
             </el-button>
             <el-button
               type="text"
               icon="el-icon-delete"
               class="red"
               @click="handleDelete(scope.row)"
-            >删除
+              >删除
             </el-button>
           </template>
         </el-table-column>
@@ -105,7 +105,7 @@
       <span slot="footer" class="dialog-footer">
         <el-button @click="addVisible = false">取 消</el-button>
         <el-button type="primary" @click="saveAdd" v-loading="btnLoading"
-        >确 定</el-button
+          >确 定</el-button
         >
       </span>
     </el-dialog>
@@ -140,7 +140,7 @@
       <span slot="footer" class="dialog-footer">
         <el-button @click="editVisible = false">取 消</el-button>
         <el-button type="primary" @click="saveEdit" v-loading="btnLoading"
-        >确 定</el-button
+          >确 定</el-button
         >
       </span>
     </el-dialog>
@@ -156,7 +156,7 @@
       <span slot="footer" class="dialog-footer">
         <el-button @click="delVisible = false">取 消</el-button>
         <el-button type="primary" @click="deleteRow" v-loading="btnLoading"
-        >确 定</el-button
+          >确 定</el-button
         >
       </span>
     </el-dialog>
@@ -164,230 +164,230 @@
 </template>
 
 <script>
-  import userApi from '../api/userApi';
-  import groupApi from '../api/groupApi';
+import userApi from "../api/userApi";
+import groupApi from "../api/groupApi";
 
-  export default {
-    data() {
-      return {
-        title: this.$route.meta.title,
-        tableData: [],
-        cur_page: 1,
-        rows: 5,
-        multipleSelection: [],
-        addVisible: false,
-        editVisible: false,
-        delVisible: false,
-        editForm: {
-          username: '',
-          password: '',
-          name: '',
-          role: ''
-        },
-        addForm: {
-          username: '',
-          password: '',
-          name: '',
-          role: ''
-        },
-        cid: 0,
-        count: 0,
-        selectUsername: '',
-        selectName: '',
-        tableLoading: false,
-        btnLoading: false,
-        groupList: []
-      };
-    },
-    created() {
+export default {
+  data() {
+    return {
+      title: this.$route.meta.title,
+      tableData: [],
+      cur_page: 1,
+      rows: 5,
+      multipleSelection: [],
+      addVisible: false,
+      editVisible: false,
+      delVisible: false,
+      editForm: {
+        username: "",
+        password: "",
+        name: "",
+        role: "",
+      },
+      addForm: {
+        username: "",
+        password: "",
+        name: "",
+        role: "",
+      },
+      cid: 0,
+      count: 0,
+      selectUsername: "",
+      selectName: "",
+      tableLoading: false,
+      btnLoading: false,
+      groupList: [],
+    };
+  },
+  created() {
+    this.getData();
+    this.getGroupList();
+  },
+  methods: {
+    // 分页导航
+    handleCurrentChange(val) {
+      this.cur_page = val;
       this.getData();
-      this.getGroupList();
     },
-    methods: {
-      // 分页导航
-      handleCurrentChange(val) {
-        this.cur_page = val;
-        this.getData();
-      },
-      // 获取列表数据
-      getData(search) {
-        this.tableLoading = true;
-        let params = {
-          page: search ? 1 : this.cur_page,
-          rows: this.rows,
-          username: this.selectUsername,
-          name: this.selectName
-        };
-        userApi
-          .adminList(params)
-          .then((res) => {
-            this.tableData = res.data.list;
-            this.count = parseInt(res.data.count);
-            this.tableLoading = false;
-          })
-          .catch((err) => {
-            this.tableLoading = false;
-            console.log(err);
-          });
-      },
-      getGroupList() {
-        this.tableLoading = true;
-        let params = {};
-        groupApi
-          .groupList(params)
-          .then((res) => {
-            this.groupList = res.data.list;
-            this.tableLoading = false;
-          })
-          .catch((err) => {
-            this.tableLoading = false;
-            console.log(err);
-          });
-      },
-      search() {
-        this.getData(true);
-      },
-      // 删除搜索的内容刷新用户列表
-      queryClearfresh() {
-        this.cur_page = 1; // 重置页数
-        this.getData();
-      },
-      handleAdd() {
-        // 清空对象
-        this.addForm = {
-          username: '',
-          password: '',
-          name: '',
-          role: ''
-        };
-        this.addVisible = true;
-      },
-      handleEdit(row) {
-        this.cid = row.uid;
-        this.btnLoading = true;
-        userApi
-          .getAdminById(this.cid)
-          .then((res) => {
-            this.btnLoading = false;
-            this.editForm = {
-              name: res.data.name,
-              username: res.data.username,
-              password: res.data.password,
-              role: res.data.role
-            };
-          })
-          .catch((err) => {
-            console.log(err);
-            this.btnLoading = false;
-          });
+    // 获取列表数据
+    getData(search) {
+      this.tableLoading = true;
+      let params = {
+        page: search ? 1 : this.cur_page,
+        rows: this.rows,
+        username: this.selectUsername,
+        name: this.selectName,
+      };
+      userApi
+        .adminList(params)
+        .then((res) => {
+          this.tableData = res.data.list;
+          this.count = parseInt(res.data.count);
+          this.tableLoading = false;
+        })
+        .catch((err) => {
+          this.tableLoading = false;
+          console.log(err);
+        });
+    },
+    getGroupList() {
+      this.tableLoading = true;
+      let params = {};
+      groupApi
+        .groupList(params)
+        .then((res) => {
+          this.groupList = res.data.list;
+          this.tableLoading = false;
+        })
+        .catch((err) => {
+          this.tableLoading = false;
+          console.log(err);
+        });
+    },
+    search() {
+      this.getData(true);
+    },
+    // 删除搜索的内容刷新用户列表
+    queryClearfresh() {
+      this.cur_page = 1; // 重置页数
+      this.getData();
+    },
+    handleAdd() {
+      // 清空对象
+      this.addForm = {
+        username: "",
+        password: "",
+        name: "",
+        role: "",
+      };
+      this.addVisible = true;
+    },
+    handleEdit(row) {
+      this.cid = row.uid;
+      this.btnLoading = true;
+      userApi
+        .getAdminById(this.cid)
+        .then((res) => {
+          this.btnLoading = false;
+          this.editForm = {
+            name: res.data.name,
+            username: res.data.username,
+            password: res.data.password,
+            role: res.data.role,
+          };
+        })
+        .catch((err) => {
+          console.log(err);
+          this.btnLoading = false;
+        });
 
-        this.editVisible = true;
-      },
-      handleDelete(row) {
-        this.cid = row.uid;
-        this.delVisible = true;
-      },
-      handleSelectionChange(val) {
-        this.multipleSelection = val;
-      },
-      // 添加
-      saveAdd() {
-        this.btnLoading = true;
-        let params = {
-          username: this.addForm.username,
-          password: this.addForm.password,
-          name: this.addForm.name,
-          role: this.addForm.role
-        };
-        userApi
-          .insertAdmin(params)
-          .then((res) => {
-            this.btnLoading = false;
-            this.$message.success(`添加成功`);
-            this.addVisible = false;
-            this.getData();
-          })
-          .catch((err) => {
-            console.log(err);
-            this.btnLoading = false;
-          });
-      },
-      // 修改
-      saveEdit() {
-        this.btnLoading = true;
-        let params = {
-          uid: this.cid,
-          username: this.editForm.username,
-          password: this.editForm.password,
-          name: this.editForm.name,
-          role: this.editForm.role
-        };
-        console.log(params);
-        userApi
-          .editAdmin(params)
-          .then((res) => {
-            this.btnLoading = false;
-            this.$message.success(`修改成功`);
-            this.editVisible = false;
-            this.getData();
-          })
-          .catch((err) => {
-            console.log(err);
-            this.btnLoading = false;
-          });
-      },
-      // 确定删除u
-      deleteRow() {
-        let params = {
-          uid: this.cid
-        };
-        //console.log(params);
-        userApi
-          .deleteAdmin(params)
-          .then((res) => {
-            this.btnLoading = false;
-            this.$message.success('删除成功');
-            this.delVisible = false;
-            this.getData();
-          })
-          .catch((err) => {
-            console.log(err);
-            this.btnLoading = false;
-          });
-      }
-    }
-  };
+      this.editVisible = true;
+    },
+    handleDelete(row) {
+      this.cid = row.uid;
+      this.delVisible = true;
+    },
+    handleSelectionChange(val) {
+      this.multipleSelection = val;
+    },
+    // 添加
+    saveAdd() {
+      this.btnLoading = true;
+      let params = {
+        username: this.addForm.username,
+        password: this.addForm.password,
+        name: this.addForm.name,
+        role: this.addForm.role,
+      };
+      userApi
+        .insertAdmin(params)
+        .then((res) => {
+          this.btnLoading = false;
+          this.$message.success(`添加成功`);
+          this.addVisible = false;
+          this.getData();
+        })
+        .catch((err) => {
+          console.log(err);
+          this.btnLoading = false;
+        });
+    },
+    // 修改
+    saveEdit() {
+      this.btnLoading = true;
+      let params = {
+        uid: this.cid,
+        username: this.editForm.username,
+        password: this.editForm.password,
+        name: this.editForm.name,
+        role: this.editForm.role,
+      };
+      console.log(params);
+      userApi
+        .editAdmin(params)
+        .then((res) => {
+          this.btnLoading = false;
+          this.$message.success(`修改成功`);
+          this.editVisible = false;
+          this.getData();
+        })
+        .catch((err) => {
+          console.log(err);
+          this.btnLoading = false;
+        });
+    },
+    // 确定删除u
+    deleteRow() {
+      let params = {
+        uid: this.cid,
+      };
+      //console.log(params);
+      userApi
+        .deleteAdmin(params)
+        .then((res) => {
+          this.btnLoading = false;
+          this.$message.success("删除成功");
+          this.delVisible = false;
+          this.getData();
+        })
+        .catch((err) => {
+          console.log(err);
+          this.btnLoading = false;
+        });
+    },
+  },
+};
 </script>
 
 <style scoped>
-  .handle-box {
-    margin-bottom: 20px;
-  }
+.handle-box {
+  margin-bottom: 20px;
+}
 
-  .handle-select {
-    width: 120px;
-  }
+.handle-select {
+  width: 120px;
+}
 
-  .handle-input {
-    width: 300px;
-    display: inline-block;
-  }
+.handle-input {
+  width: 300px;
+  display: inline-block;
+}
 
-  .del-dialog-cnt {
-    font-size: 16px;
-    text-align: center;
-  }
+.del-dialog-cnt {
+  font-size: 16px;
+  text-align: center;
+}
 
-  .table {
-    width: 100%;
-    font-size: 14px;
-  }
+.table {
+  width: 100%;
+  font-size: 14px;
+}
 
-  .red {
-    color: #ff0000;
-  }
+.red {
+  color: #ff0000;
+}
 
-  .mr10 {
-    margin-right: 10px;
-  }
+.mr10 {
+  margin-right: 10px;
+}
 </style>

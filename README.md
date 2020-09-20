@@ -1,10 +1,10 @@
 # netcollectafterend
 
-> 网络收藏系统后台
+> 网络收藏系统后台（vue+vue-cli+element-ui）
 
 ## Build Setup
 
-``` bash
+```bash
 # install dependencies
 npm install
 
@@ -18,4 +18,17 @@ npm run build
 npm run build --report
 ```
 
-For a detailed explanation on how things work, check out the [guide](http://vuejs-templates.github.io/webpack/) and [docs for vue-loader](http://vuejs.github.io/vue-loader).
+### 项目使用以下技术栈
+
+- axios 异步处理方法库
+- element-ui 前端 UI 库
+- vue-cli vue 脚手架
+- vue-router 路由
+- vuex vue 状态管理
+- js-cookie cookie 生成
+- babel-polyfill 转码器,可以将 ES6 代码转为 ES5 代码
+
+API 文档请参见 netcollectapicloud 文件夹
+api 访问地址是 http://localhost:3020
+
+网络收藏后台访问地址是 http://localhost:8080

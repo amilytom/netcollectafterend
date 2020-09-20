@@ -3,7 +3,7 @@
     <div class="crumbs">
       <el-breadcrumb separator="/">
         <el-breadcrumb-item
-        ><i class="el-icon-star-on"></i> {{ title }}
+          ><i class="el-icon-star-on"></i> {{ title }}
         </el-breadcrumb-item>
       </el-breadcrumb>
     </div>
@@ -27,7 +27,7 @@
         ></el-input>
         <el-button type="primary" icon="search" @click="search">搜索</el-button>
         <el-button type="primary" icon="search" @click="handleAdd"
-        >添加
+          >添加
         </el-button>
       </div>
       <el-table
@@ -49,7 +49,7 @@
         <el-table-column prop="key" label="关键词"></el-table-column>
         <el-table-column label="分类名称" width="90">
           <template slot-scope="scope"
-          >{{ getCateName(scope.row.cid) }}
+            >{{ getCateName(scope.row.cid) }}
           </template>
         </el-table-column>
         <el-table-column
@@ -63,14 +63,14 @@
               type="text"
               icon="el-icon-edit"
               @click="handleEdit(scope.row)"
-            >修改
+              >修改
             </el-button>
             <el-button
               type="text"
               icon="el-icon-delete"
               class="red"
               @click="handleDelete(scope.row)"
-            >删除
+              >删除
             </el-button>
           </template>
         </el-table-column>
@@ -134,7 +134,7 @@
       <span slot="footer" class="dialog-footer">
         <el-button @click="addVisible = false">取 消</el-button>
         <el-button type="primary" @click="saveAdd" v-loading="btnLoading"
-        >确 定</el-button
+          >确 定</el-button
         >
       </span>
     </el-dialog>
@@ -184,7 +184,7 @@
       <span slot="footer" class="dialog-footer">
         <el-button @click="editVisible = false">取 消</el-button>
         <el-button type="primary" @click="saveEdit" v-loading="btnLoading"
-        >确 定</el-button
+          >确 定</el-button
         >
       </span>
     </el-dialog>
@@ -200,7 +200,7 @@
       <span slot="footer" class="dialog-footer">
         <el-button @click="delVisible = false">取 消</el-button>
         <el-button type="primary" @click="deleteRow" v-loading="btnLoading"
-        >确 定</el-button
+          >确 定</el-button
         >
       </span>
     </el-dialog>
@@ -208,248 +208,248 @@
 </template>
 
 <script>
-  import linkApi from '../api/linkApi';
-  import cateApi from '../api/cateApi';
+import linkApi from "../api/linkApi";
+import cateApi from "../api/cateApi";
 
-  export default {
-    data() {
-      return {
-        title: this.$route.meta.title,
-        tableData: [],
-        curPage: 1,
-        rows: 5,
-        multipleSelection: [],
-        addVisible: false,
-        editVisible: false,
-        delVisible: false,
-        editForm: {
-          title: '',
-          url: '',
-          key: '',
-          cat: '',
-          istop: ''
+export default {
+  data() {
+    return {
+      title: this.$route.meta.title,
+      tableData: [],
+      curPage: 1,
+      rows: 5,
+      multipleSelection: [],
+      addVisible: false,
+      editVisible: false,
+      delVisible: false,
+      editForm: {
+        title: "",
+        url: "",
+        key: "",
+        cat: "",
+        istop: "",
+      },
+      addForm: {
+        title: "",
+        url: "",
+        key: "",
+        cat: "",
+        istop: "",
+      },
+      cid: 0,
+      count: 0,
+      searchName: "",
+      searchKey: "",
+      tableLoading: false,
+      btnLoading: false,
+      cateList: [],
+      topList: [
+        {
+          value: 0,
+          label: "无",
         },
-        addForm: {
-          title: '',
-          url: '',
-          key: '',
-          cat: '',
-          istop: ''
+        {
+          value: 1,
+          label: "置顶",
         },
-        cid: 0,
-        count: 0,
-        searchName: '',
-        searchKey: '',
-        tableLoading: false,
-        btnLoading: false,
-        cateList: [],
-        topList: [
-          {
-            value: 0,
-            label: '无'
-          },
-          {
-            value: 1,
-            label: '置顶'
-          }
-        ]
-      };
-    },
-    created() {
+      ],
+    };
+  },
+  created() {
+    this.getData();
+    this.getCateList();
+  },
+  methods: {
+    // 分页导航
+    handleCurrentChange(val) {
+      this.curPage = val;
       this.getData();
-      this.getCateList();
     },
-    methods: {
-      // 分页导航
-      handleCurrentChange(val) {
-        this.curPage = val;
-        this.getData();
-      },
-      // 获取列表数据
-      getData(search) {
-        this.tableLoading = true;
-        let params = {
-          page: search ? 1 : this.curPage,
-          rows: this.rows,
-          title: this.searchName,
-          key: this.searchKey
-        };
-        linkApi
-          .linkList(params)
-          .then((res) => {
-            this.tableData = res.data.list;
-            this.count = parseInt(res.data.count);
-            this.tableLoading = false;
-          })
-          .catch((err) => {
-            this.tableLoading = false;
-            console.log(err);
-          });
-      },
-      // 获取分类下拉列表数据
-      getCateList(search) {
-        this.tableLoading = true;
-        let params = {
-          dropList: true
-        };
-        cateApi
-          .cateList(params)
-          .then((res) => {
-            this.cateList = res.data.list;
-            this.tableLoading = false;
-          })
-          .catch((err) => {
-            this.tableLoading = false;
-            console.log(err);
-          });
-      },
-      // 获取分类id对应的分类名称
-      getCateName(id) {
-        let cateName;
-        this.cateList.forEach((item) => {
-          if (id == item.cid) {
-            cateName = item.name;
-          }
+    // 获取列表数据
+    getData(search) {
+      this.tableLoading = true;
+      let params = {
+        page: search ? 1 : this.curPage,
+        rows: this.rows,
+        title: this.searchName,
+        key: this.searchKey,
+      };
+      linkApi
+        .linkList(params)
+        .then((res) => {
+          this.tableData = res.data.list;
+          this.count = parseInt(res.data.count);
+          this.tableLoading = false;
+        })
+        .catch((err) => {
+          this.tableLoading = false;
+          console.log(err);
         });
-        return cateName;
-      },
-      search() {
-        this.curPage = 1; // 重置页数
-        this.getData(true);
-      },
-      // 删除搜索的内容刷新用户列表
-      queryClearfresh() {
-        this.curPage = 1; // 重置页数
-        this.getData();
-      },
-      handleAdd() {
-        this.addForm = {
-          title: '',
-          url: '',
-          key: '',
-          cat: '',
-          istop: ''
-        };
-        this.addVisible = true;
-      },
-      handleEdit(row) {
-        this.cid = row.id;
-        this.editForm = {
-          title: row.title,
-          url: row.url,
-          key: row.key,
-          cat: row.cat,
-          istop: row.istop
-        };
-        this.editVisible = true;
-      },
-      handleDelete(row) {
-        this.cid = row.id;
-        this.delVisible = true;
-      },
-      handleSelectionChange(val) {
-        this.multipleSelection = val;
-      },
-      // 添加
-      saveAdd() {
-        this.btnLoading = true;
-        let params = {
-          title: this.addForm.title,
-          url: this.addForm.url,
-          key: this.addForm.key,
-          cat: this.addForm.cat,
-          istop: this.addForm.istop
-        };
-        //console.log(params);
-        linkApi
-          .insertlink(params)
-          .then((res) => {
-            this.btnLoading = false;
-            this.$message.success(`添加成功`);
-            this.addVisible = false;
-            this.getData();
-          })
-          .catch((err) => {
-            console.log(err);
-            this.btnLoading = false;
-          });
-      },
-      // 修改
-      saveEdit() {
-        this.btnLoading = true;
-        let params = {
-          id: this.cid,
-          title: this.editForm.title,
-          url: this.editForm.url,
-          key: this.editForm.key,
-          cat: this.editForm.cat,
-          istop: this.editForm.istop
-        };
-        linkApi
-          .editlink(params)
-          .then((res) => {
-            this.btnLoading = false;
-            this.$message.success(`修改成功`);
-            this.editVisible = false;
-            this.getData();
-          })
-          .catch((err) => {
-            console.log(err);
-            this.btnLoading = false;
-          });
-      },
-      // 确定删除
-      deleteRow() {
-        this.btnLoading = true;
-        let params = {
-          id: this.cid
-        };
-        linkApi
-          .deletelink(params)
-          .then((res) => {
-            this.btnLoading = false;
-            this.$message.success('删除成功');
-            this.delVisible = false;
-            this.getData();
-          })
-          .catch((err) => {
-            console.log(err);
-            this.btnLoading = false;
-          });
-      }
-    }
-  };
+    },
+    // 获取分类下拉列表数据
+    getCateList(search) {
+      this.tableLoading = true;
+      let params = {
+        dropList: true,
+      };
+      cateApi
+        .cateList(params)
+        .then((res) => {
+          this.cateList = res.data.list;
+          this.tableLoading = false;
+        })
+        .catch((err) => {
+          this.tableLoading = false;
+          console.log(err);
+        });
+    },
+    // 获取分类id对应的分类名称
+    getCateName(id) {
+      let cateName;
+      this.cateList.forEach((item) => {
+        if (id == item.cid) {
+          cateName = item.name;
+        }
+      });
+      return cateName;
+    },
+    search() {
+      this.curPage = 1; // 重置页数
+      this.getData(true);
+    },
+    // 删除搜索的内容刷新用户列表
+    queryClearfresh() {
+      this.curPage = 1; // 重置页数
+      this.getData();
+    },
+    handleAdd() {
+      this.addForm = {
+        title: "",
+        url: "",
+        key: "",
+        cat: "",
+        istop: "",
+      };
+      this.addVisible = true;
+    },
+    handleEdit(row) {
+      this.cid = row.id;
+      this.editForm = {
+        title: row.title,
+        url: row.url,
+        key: row.key,
+        cat: row.cat,
+        istop: row.istop,
+      };
+      this.editVisible = true;
+    },
+    handleDelete(row) {
+      this.cid = row.id;
+      this.delVisible = true;
+    },
+    handleSelectionChange(val) {
+      this.multipleSelection = val;
+    },
+    // 添加
+    saveAdd() {
+      this.btnLoading = true;
+      let params = {
+        title: this.addForm.title,
+        url: this.addForm.url,
+        key: this.addForm.key,
+        cat: this.addForm.cat,
+        istop: this.addForm.istop,
+      };
+      //console.log(params);
+      linkApi
+        .insertlink(params)
+        .then((res) => {
+          this.btnLoading = false;
+          this.$message.success(`添加成功`);
+          this.addVisible = false;
+          this.getData();
+        })
+        .catch((err) => {
+          console.log(err);
+          this.btnLoading = false;
+        });
+    },
+    // 修改
+    saveEdit() {
+      this.btnLoading = true;
+      let params = {
+        id: this.cid,
+        title: this.editForm.title,
+        url: this.editForm.url,
+        key: this.editForm.key,
+        cat: this.editForm.cat,
+        istop: this.editForm.istop,
+      };
+      linkApi
+        .editlink(params)
+        .then((res) => {
+          this.btnLoading = false;
+          this.$message.success(`修改成功`);
+          this.editVisible = false;
+          this.getData();
+        })
+        .catch((err) => {
+          console.log(err);
+          this.btnLoading = false;
+        });
+    },
+    // 确定删除
+    deleteRow() {
+      this.btnLoading = true;
+      let params = {
+        id: this.cid,
+      };
+      linkApi
+        .deletelink(params)
+        .then((res) => {
+          this.btnLoading = false;
+          this.$message.success("删除成功");
+          this.delVisible = false;
+          this.getData();
+        })
+        .catch((err) => {
+          console.log(err);
+          this.btnLoading = false;
+        });
+    },
+  },
+};
 </script>
 
 <style scoped>
-  .handle-box {
-    margin-bottom: 20px;
-  }
+.handle-box {
+  margin-bottom: 20px;
+}
 
-  .handle-select {
-    width: 120px;
-  }
+.handle-select {
+  width: 120px;
+}
 
-  .handle-input {
-    width: 300px;
-    display: inline-block;
-  }
+.handle-input {
+  width: 300px;
+  display: inline-block;
+}
 
-  .del-dialog-cnt {
-    font-size: 16px;
-    text-align: center;
-  }
+.del-dialog-cnt {
+  font-size: 16px;
+  text-align: center;
+}
 
-  .table {
-    width: 100%;
-    font-size: 14px;
-  }
+.table {
+  width: 100%;
+  font-size: 14px;
+}
 
-  .red {
-    color: #ff0000;
-  }
+.red {
+  color: #ff0000;
+}
 
-  .mr10 {
-    margin-right: 10px;
-  }
+.mr10 {
+  margin-right: 10px;
+}
 </style>
