@@ -1,10 +1,10 @@
-import axios from 'axios';
-import {Message} from 'element-ui';
-import Cookies from 'js-cookie';
+import axios from "axios";
+import { Message } from "element-ui";
+import Cookies from "js-cookie";
 
 // 获取设置的代理网址
 const base_url =
-  process.env.NODE_ENV === 'development'
+  process.env.NODE_ENV === "development"
     ? process.env.BASE_API
     : process.env.API_ROOT;
 
@@ -12,22 +12,22 @@ const base_url =
 const service = axios.create({
   baseURL: base_url, // api的base_url
   timeout: 8 * 1000, // 请求超时时间
-  withCredentials: true // 允许携带cookie
+  withCredentials: true, // 允许携带cookie
 });
 
 // 配置公共的请求头
 //service.defaults.headers.common["Authorization"] = Cookies.get("token");
 
 //配置公共的 post 的 Content-Type
-service.defaults.headers.post['Content-Type'] = 'application/json';
+service.defaults.headers.post["Content-Type"] = "application/json";
 
 //跳转登录页面，并将要浏览的页面fullPath传过去，登录成功后跳转需要访问的页面
 const toLogin = () => {
   router.replace({
-    path: '/login',
+    path: "/login",
     query: {
-      redirect: router.currentRoute.fullPath
-    }
+      redirect: router.currentRoute.fullPath,
+    },
   });
 };
 
@@ -40,9 +40,9 @@ const errorHandle = (status, msg) => {
     case 401:
       Message({
         showClose: true,
-        message: '尚未登录，请登录',
-        type: 'warning',
-        duration: 1500
+        message: "尚未登录，请登录",
+        type: "warning",
+        duration: 1500,
       });
       toLogin();
       break;
@@ -51,9 +51,9 @@ const errorHandle = (status, msg) => {
     case 403:
       Message({
         showClose: true,
-        message: '登录过期，请重新登录',
-        type: 'warning',
-        duration: 1500
+        message: "登录过期，请重新登录",
+        type: "warning",
+        duration: 1500,
       });
       //localStorage.removeItem('token');
       //store.commit('loginSuccess', null);
@@ -65,17 +65,17 @@ const errorHandle = (status, msg) => {
     case 404:
       Message({
         showClose: true,
-        message: '网络请求不存在',
-        type: 'error',
-        duration: 1500
+        message: "网络请求不存在",
+        type: "error",
+        duration: 1500,
       });
       break;
     default:
       Message({
         showClose: true,
         message: msg,
-        type: 'error',
-        duration: 1500
+        type: "error",
+        duration: 1500,
       });
   }
 };
@@ -87,7 +87,7 @@ service.interceptors.request.use(
     // 但是即使token存在，也有可能token是过期的，所以在每次的请求头中携带token
     // 后台根据携带的token判断用户的登录情况，并返回给我们对应的状态码
     // 而后我们可以在响应拦截器中，根据状态码进行一些统一的操作。
-    const token = Cookies.get('access-token');
+    const token = Cookies.get("access-token");
     token && (config.headers.token = token);
     //console.log(config);
     return config;
@@ -114,8 +114,8 @@ service.interceptors.response.use(
       Message({
         showClose: true,
         message: res.msg,
-        type: 'error',
-        duration: 1500
+        type: "error",
+        duration: 1500,
       });
       //返回一个带有拒绝原因的Promise对象
       return Promise.reject(res);
@@ -136,8 +136,8 @@ service.interceptors.response.use(
       Message({
         showClose: true,
         message: `服务器错误！错误代码：${error.response.status}`,
-        type: 'error',
-        duration: 1500
+        type: "error",
+        duration: 1500,
       });
       //需要在vuex中提供请求超时处理的方法
       //定时刷新重新获取数据

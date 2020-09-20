@@ -48,131 +48,131 @@
 </template>
 
 <script>
-  import groupApi from '../api/groupApi';
-  import authApi from '../api/authApi';
-  import Cookies from 'js-cookie';
+import groupApi from "../api/groupApi";
+import authApi from "../api/authApi";
+import Cookies from "js-cookie";
 
-  export default {
-    data() {
-      return {
-        items: [
-          {
-            icon: 'el-icon-s-home',
-            index: 'intro',
-            title: '系统首页'
-          }
-          // {
-          //   icon: "el-icon-s-flag",
-          //   index: "cate",
-          //   title: "分类管理",
-          // },
-          // {
-          //   icon: "el-icon-star-on",
-          //   index: "link",
-          //   title: "链接管理",
-          // },
-          // {
-          //   icon: "el-icon-s-order",
-          //   index: "group",
-          //   title: "群组管理",
-          // },
-          // {
-          //   icon: "el-icon-user-solid",
-          //   index: "user",
-          //   title: "用户管理",
-          // },
-          // {
-          //   icon: "el-icon-s-tools",
-          //   index: "auth",
-          //   title: "权限管理",
-          // },
-        ],
-        authIdData: [],
-        authData: []
-      };
+export default {
+  data() {
+    return {
+      items: [
+        {
+          icon: "el-icon-s-home",
+          index: "intro",
+          title: "系统首页",
+        },
+        // {
+        //   icon: "el-icon-s-flag",
+        //   index: "cate",
+        //   title: "分类管理",
+        // },
+        // {
+        //   icon: "el-icon-star-on",
+        //   index: "link",
+        //   title: "链接管理",
+        // },
+        // {
+        //   icon: "el-icon-s-order",
+        //   index: "group",
+        //   title: "群组管理",
+        // },
+        // {
+        //   icon: "el-icon-user-solid",
+        //   index: "user",
+        //   title: "用户管理",
+        // },
+        // {
+        //   icon: "el-icon-s-tools",
+        //   index: "auth",
+        //   title: "权限管理",
+        // },
+      ],
+      authIdData: [],
+      authData: [],
+    };
+  },
+  computed: {
+    onRoutes() {
+      return this.$route.path.replace("/", "");
     },
-    computed: {
-      onRoutes() {
-        return this.$route.path.replace('/', '');
-      }
-    },
-    created() {
-      // 通过 Event Bus 进行组件间通信，来折叠侧边栏
-      // bus.$on('collapse', msg => {
-      //     this.collapse = msg;
-      // })
-      this.$nextTick(() => {
-        this.getData();
-        //this.getRouteList();
-      });
-    },
-    methods: {
-      // 获取列表数据
-      getData() {
-        let role = Cookies.get('role');
-        let routeList = this.$router.options.routes[1].children;
-        groupApi
-          .getGroupByRole(role)
-          .then((res) => {
-            this.authIdData = JSON.parse(res.data.permit);
-            //console.log(this.authIdData);
-            this.authIdData.forEach((item, index) => {
-              authApi
-                .getauthById(item)
-                .then((res) => {
-                  //console.log(res.data);
+  },
+  created() {
+    // 通过 Event Bus 进行组件间通信，来折叠侧边栏
+    // bus.$on('collapse', msg => {
+    //     this.collapse = msg;
+    // })
+    this.$nextTick(() => {
+      this.getData();
+      //this.getRouteList();
+    });
+  },
+  methods: {
+    // 获取列表数据
+    getData() {
+      let role = Cookies.get("role");
+      let routeList = this.$router.options.routes[1].children;
+      groupApi
+        .getGroupByRole(role)
+        .then((res) => {
+          this.authIdData = JSON.parse(res.data.permit);
+          //console.log(this.authIdData);
+          this.authIdData.forEach((item, index) => {
+            authApi
+              .getauthById(item)
+              .then((res) => {
+                //console.log(res.data);
+                debugger;
+                routeList.forEach((item2, index2) => {
+                  //console.log(item2);
                   debugger;
-                  routeList.forEach((item2, index2) => {
-                    //console.log(item2);
+                  if (res.data.oname == item2.meta.title) {
+                    //this.$set(this.items, index, res.data.oname);
+                    this.items.push(item2.meta);
                     debugger;
-                    if (res.data.oname == item2.meta.title) {
-                      //this.$set(this.items, index, res.data.oname);
-                      this.items.push(item2.meta);
-                      debugger;
-                      console.log(this.items);
-                    }
-                  });
-                })
-                .catch((err) => {
-                  console.log(err);
+                    console.log(this.items);
+                  }
                 });
-            });
-          })
-          .catch((err) => {
-            console.log(err);
+              })
+              .catch((err) => {
+                console.log(err);
+              });
           });
-      }
-      // getRouteList() {
-      //   let routeList = this.$router.options.routes[1].children;
-      //   console.log(this.oNameData);
-      //   routeList.forEach((item, index) => {
-      //     this.items.push(item.meta);
-      //   });
-      //   //console.log(this.items);
-      // },
-    }
-  };
+        })
+        .catch((err) => {
+          console.log(err);
+        });
+    },
+    // getRouteList() {
+    //   let routeList = this.$router.options.routes[1].children;
+    //   console.log(this.oNameData);
+    //   routeList.forEach((item, index) => {
+    //     this.items.push(item.meta);
+    //   });
+    //   //console.log(this.items);
+    // },
+  },
+};
 </script>
 
 <style scoped>
-  .sidebar {
-    display: block;
-    position: absolute;
-    left: 0;
-    top: 70px;
-    bottom: 0;
-    overflow-y: scroll;
-  }
+.sidebar {
+  display: block;
+  position: absolute;
+  left: 0;
+  top: 70px;
+  bottom: 0;
+  overflow-y: scroll;
+}
 
-  .sidebar::-webkit-scrollbar {
-    width: 0;
-  }
+.sidebar::-webkit-scrollbar {
+  width: 0;
+}
 
-  .sidebar-el-menu:not(.el-menu--collapse) {
-    width: 250px;
-  }
+.sidebar-el-menu:not(.el-menu--collapse) {
+  width: 250px;
+}
 
-  .sidebar > ul {
-    height: 100%;
-  }
+.sidebar > ul {
+  height: 100%;
+}
 </style>
