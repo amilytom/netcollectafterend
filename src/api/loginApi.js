@@ -9,6 +9,13 @@ const loginApi = {
       data: param,
     });
   },
+  regist(param = {}) {
+    return request({
+      url: "/regist",
+      method: "post",
+      data: param,
+    });
+  },
 };
 
 export default loginApi;
