@@ -36,6 +36,15 @@ const userApi = {
     });
   },
 
+  // 更改一条管理员信息
+  editAdminPwd(param = {}) {
+    return request({
+      url: "/user/pwd",
+      method: "put",
+      data: param,
+    });
+  },
+
   // 删除一条管理员信息
   deleteAdmin(param = {}) {
     return request({
