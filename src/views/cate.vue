@@ -176,6 +176,7 @@
 
 <script>
 import cateApi from "../api/cateApi";
+import Cookies from "js-cookie";
 
 export default {
   data() {
@@ -215,6 +216,7 @@ export default {
           label: "推荐",
         },
       ],
+      uid: JSON.parse(Cookies.get("userInfo")).uid,
     };
   },
   created() {
@@ -274,6 +276,7 @@ export default {
       let params = {
         dropList: true,
         pid: 0,
+        uid: this.uid,
       };
       cateApi
         .cateList(params)
@@ -336,6 +339,7 @@ export default {
       let params = {
         name: this.addForm.name,
         pid: this.addForm.pid,
+        uid: this.uid,
         isgood: this.addForm.isgood,
       };
       console.log(params);
@@ -359,6 +363,7 @@ export default {
         cid: this.cid,
         name: this.editForm.name,
         pid: this.editForm.pid,
+        uid: this.uid,
         isgood: this.editForm.isgood,
       };
       cateApi
